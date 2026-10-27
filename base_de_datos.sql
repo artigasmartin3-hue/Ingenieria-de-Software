@@ -1,4 +1,3 @@
-DROP DATABASE IF EXISTS hotel_rios_del_sur;
 CREATE DATABASE hotel_rios_del_sur
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
