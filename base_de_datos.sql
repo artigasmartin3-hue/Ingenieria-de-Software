@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS hotel_rios_del_sur;
 CREATE DATABASE hotel_rios_del_sur
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
@@ -98,9 +99,13 @@ CREATE INDEX idx_reserva_fechas       ON reserva(fechaInicio, fechaFin);
 CREATE INDEX idx_detalle_fechas       ON detalle_reserva(fechaInicial, fechaFinal);
 CREATE INDEX idx_detalle_habitacion   ON detalle_reserva(idHabitacion);
 
+CREATE INDEX idx_cliente_nombre   ON cliente(nombre);
+CREATE INDEX idx_huesped_nombre   ON huesped(nombre);
+CREATE INDEX idx_usuario_nombre   ON usuario(nombre);
+
 INSERT INTO usuario (nombre, email, passwordHash, rol, turno, cargo) VALUES
-('Ana Recepción', 'ana@hotelrios.cl', '$2y$10$ejemploHashRecepcion', 'RECEPCION', 'Mañana', NULL),
-('Carlos Admin',  'carlos@hotelrios.cl', '$2y$10$ejemploHashAdmin', 'ADMINISTRACION', NULL, 'Jefe de Operaciones');
+('Ana Recepción', 'ana@hotelrios.cl', '\$2y\$10\$ejemploHashRecepcion', 'RECEPCION', 'Mañana', NULL),
+('Carlos Admin',  'carlos@hotelrios.cl', '\$2y\$10\$ejemploHashAdmin', 'ADMINISTRACION', NULL, 'Jefe de Operaciones');
 
 INSERT INTO cliente (nombre, rut, telefono, email, direccion) VALUES
 ('Pedro Soto',   '11111111-1', '+56911111111', 'pedro@mail.cl', 'Av. Alemania 123, Valdivia'),
@@ -124,3 +129,22 @@ INSERT INTO detalle_reserva (idReserva, idHabitacion, fechaInicial, fechaFinal, 
 INSERT INTO detalle_huesped (idDetalle, idHuesped) VALUES
 (1, 1),
 (1, 2);
+
+SELECT * FROM cliente WHERE rut = '11111111-1';
+SELECT * FROM huesped WHERE rut = '11111111-1';
+
+SELECT * FROM cliente  WHERE nombre LIKE '%Soto%';
+SELECT * FROM huesped  WHERE nombre LIKE '%Soto%';
+SELECT * FROM usuario  WHERE nombre LIKE '%Ana%';
+
+SELECT * FROM cliente
+WHERE rut = '11111111-1'
+  AND nombre LIKE '%Pedro%';
+
+SELECT * FROM cliente
+WHERE (:rut    IS NULL OR rut    = :rut)
+  AND (:nombre IS NULL OR nombre LIKE CONCAT('%', :nombre, '%'));
+
+SELECT * FROM huesped
+WHERE (:rut    IS NULL OR rut    = :rut)
+  AND (:nombre IS NULL OR nombre LIKE CONCAT('%', :nombre, '%'));
